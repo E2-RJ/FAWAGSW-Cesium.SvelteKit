@@ -2,7 +2,7 @@ name: Deploy Release Dockerhub Image
 
 env:
   REPO_STAGE: prod
-  REPO_NAME: fawagsw
+  REPO_NAME: fwag
   REPO_TYPE: frontend
 
 on:

@@ -2,7 +2,7 @@ name: Deploy Testing Dockerhub Image
 
 env:
   REPO_STAGE: uat
-  REPO_NAME: fawagsw
+  REPO_NAME: fwag
   REPO_TYPE: frontend
 
 on:

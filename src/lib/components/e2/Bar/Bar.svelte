@@ -12,7 +12,7 @@
     };
 
     function handleChange(d: string) {
-        cesium.toggleDatasources(d, !datasourceVisability[d]);
+        cesium.ds.visability(d, !datasourceVisability[d]);
     }
 </script>
 
@@ -56,4 +56,29 @@
     >
         geoJSON1
     </Label>
+</div>
+<div class="flex items-center space-x-2">
+    <Button on:click={async () => cesium.changeTerrain(2975662)}>
+        LIDAR001</Button
+    >
+    <Button on:click={async () => cesium.changeTerrain(2975648)}
+        >LIDAR002</Button
+    >
+    <Button on:click={async () => cesium.changeTerrain(2975646)}
+        >LIDAR003</Button
+    >
+</div>
+<div class="flex items-center space-x-2">
+    <Button on:click={async () => cesium.f.to(-2.8191839, 51.457361, 1000)}>
+        POI1</Button
+    >
+    <Button on:click={async () => cesium.f.to(-2.7858999, 51.462126, 1000)}
+        >POI2</Button
+    >
+    <Button on:click={async () => cesium.f.to(-2.8046459, 51.461386, 500)}
+        >POI3</Button
+    >
+    <Button on:click={async () => cesium.f.home()}
+        >Home</Button
+    >
 </div>

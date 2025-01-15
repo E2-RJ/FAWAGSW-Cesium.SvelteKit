@@ -25,7 +25,6 @@
   export let homeView: Cartesian3;
 
   class dataSource {
-    static rename: any;
     load(
       datasource: any,
       type: string = "czml",

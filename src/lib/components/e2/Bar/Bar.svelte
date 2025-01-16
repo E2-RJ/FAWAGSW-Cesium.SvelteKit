@@ -31,7 +31,7 @@
                 for="terms"
                 class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-                geoJSON1
+                Gordano_Moor_WGS84
             </Label>
             <Checkbox
                 id="terms"
@@ -44,7 +44,7 @@
                 for="terms"
                 class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-                geoJSON1
+                Watercourse_Link_CanalRiversTrust_Clipped
             </Label>
             <Checkbox
                 id="terms"
@@ -57,23 +57,37 @@
                 for="terms"
                 class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-                geoJSON1
+                EA_Main_Rivers_Surroundings
             </Label>
         </div>
         <br />
         <div class="flex items-center space-x-2">
             <Button
                 variant="secondary"
-                on:click={async () => c.changeTerrain(2975662)}>LIDAR001</Button
+                on:click={async () => c.changeTerrain(2975662)}
+                >DSM_ST4070_P_10614_20210404_20210404_wgs84</Button
             >
             <Button
                 variant="secondary"
-                on:click={async () => c.changeTerrain(2975648)}>LIDAR002</Button
+                on:click={async () => c.changeTerrain(2975648)}
+                >DSM_ST4070_P_10614_20210404_20210404_wgs84</Button
             >
             <Button
                 variant="secondary"
-                on:click={async () => c.changeTerrain(2975646)}>LIDAR003</Button
+                on:click={async () => c.changeTerrain(2975646)}
+                >DTM_ST4570_P_10614_20210404_20210404_wgs84</Button
             >
+
+            <!--<Button
+                variant="secondary"
+                on:click={async () => c.changeTerrain(2975994)}
+                >Vegetation Object Model 1</Button
+            >
+            <Button
+                variant="secondary"
+                on:click={async () => c.changeTerrain(2975997)}
+                >Vegetation Object Model 2</Button
+            >-->
         </div>
         <br />
         <div class="flex items-center space-x-2">

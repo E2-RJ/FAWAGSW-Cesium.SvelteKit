@@ -104,8 +104,9 @@
       // List all datasources stored within Cesium
       Console.Log("STATUS", `Listing Datasources`);
       for (let i = 0; i < viewer.dataSources.length; i++) {
-        Console.Log("SUCCESS", `Found datasource`);
-        console.log(viewer.dataSources.get(i));
+        var dS = viewer.dataSources.get(i)
+        Console.Log("SUCCESS", `Found datasource ${dS.name}`);
+        console.log(dS);
       }
     }
     visability(name: string, visable: boolean) {
@@ -269,7 +270,7 @@ layers.add(cesiumLogo);
     const geoJSON = [
       { name: "geoJSON1", id: 2975982 },
       { name: "geoJSON2", id: 2975981 },
-      { name: "geoJSON3", id: 2975980 },
+      { name: "geoJSON3", id: 2980614 },
     ];
 
     geoJSON.forEach(async function (data) {

@@ -24,8 +24,32 @@
   }
   export let homeView: Cartesian3;
 
+  // Create an initial camera view
+  var initialPosition = new Cesium.Cartesian3.fromDegrees(
+    -2.959,
+    53.369,
+    1700.082,
+  );
+  var initialOrientation = new Cesium.HeadingPitchRoll.fromDegrees(
+    -3.7,
+    -37.9,
+    0.0,
+  );
+  var homeCameraView = {
+    destination: initialPosition,
+    orientation: {
+      heading: initialOrientation.heading,
+      pitch: initialOrientation.pitch,
+      roll: initialOrientation.roll,
+    }, // Add some camera flight animation options
+    duration: 2.0,
+    maximumHeight: 2000,
+    pitchAdjustHeight: 2000,
+    endTransform: Cesium.Matrix4.IDENTITY,
+  };
+
   class dataSource {
-    load(
+    async load(
       datasource: any,
       type: string = "czml",
       oldName: string = "",
@@ -40,7 +64,8 @@
           );
           break;
         case "geojson":
-          viewer.dataSources.add(Cesium.GeoJsonDataSource.load(datasource));
+          const g = await Cesium.IonResource.fromAssetId(datasource);
+          viewer.dataSources.add(Cesium.GeoJsonDataSource.load(g));
           Console.Log(
             "SUCCESS",
             `Loaded ${datasource} datasource from ${type}`,
@@ -54,14 +79,26 @@
     }
     rename(oldName: string, newName: string) {
       Console.Log("STATUS", `Renaming ${oldName} datasource to ${newName}`);
-      var dS = viewer.dataSources.getByName(oldName);
-      var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
+      var exists = new dataSource().find(newName);
+      if (exists !== -1) {
+        Console.Log(
+          "WARNING",
+          `${newName} datasource already exists, is this intentional?`,
+        );
+      }
+      var dSN = new dataSource().find(oldName); // Get the datasources number
       if (dSN !== -1) {
         viewer.dataSources.get(dSN).name = newName; // Set datasource visability
         Console.Log("SUCCESS", `${oldName} datasource name set to ${newName}`);
       } else {
-        Console.Log("WARNING", `${oldName} datasource not found`);
+        Console.Log("ERROR", `${oldName} datasource not found`);
       }
+    }
+    find(name: string) {
+      var dS = viewer.dataSources.getByName(name);
+      var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
+
+      return dSN;
     }
     list() {
       // List all datasources stored within Cesium
@@ -73,8 +110,7 @@
     }
     visability(name: string, visable: boolean) {
       // Toggle visability of a given datasource
-      var dS = viewer.dataSources.getByName(name); // Get the datasource
-      var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
+      var dSN = new dataSource().find(name); // Get the datasources number
       if (dSN !== -1) {
         viewer.dataSources.get(dSN).show = visable; // Set datasource visability
         viewer.scene.requestRender();
@@ -83,7 +119,7 @@
           `${name} datasource visability set to ${visable}`,
         );
       } else {
-        Console.Log("WARNING", `${name} datasource not found`);
+        Console.Log("ERROR", `${name} datasource not found`);
       }
     }
     remove(name: [string], inverse: boolean = false) {
@@ -112,7 +148,7 @@
         Console.Log("SUCCESS", `${name} datasource destroyed`);
       }
       if (instances <= 0) {
-        Console.Log("WARNING", `${name} datasource not found`);
+        Console.Log("ERROR", `${name} datasource not found`);
       }
     }
   }
@@ -147,92 +183,6 @@
 
   export const f = new fly();
 
-  /*
-  export function renameDatasource(d: string, n: string) {
-    Console.Log("STATUS", `Renaming ${d} datasource to ${n}`);
-    var dS = viewer.dataSources.getByName(d);
-    var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
-    if (dSN !== -1) {
-      viewer.dataSources.get(dSN).name = n; // Set datasource visability
-      Console.Log("SUCCESS", `${d} datasource name set to ${n}`);
-    } else {
-      Console.Log("WARNING", `${d} datasource not found`);
-    }
-  }
-
-  export function listDatasources() {
-    // List all datasources stored within Cesium
-    Console.Log("STATUS", `Listing Datasources`);
-    for (let i = 0; i < viewer.dataSources.length; i++) {
-      Console.Log("SUCCESS", `Found datasource`);
-      console.log(viewer.dataSources.get(i));
-    }
-  }
-
-  export function toggleDatasources(name: string, visable: boolean) {
-    // Toggle visability of a given datasource
-    var dS = viewer.dataSources.getByName(name); // Get the datasource
-    var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
-    if (dSN !== -1) {
-      viewer.dataSources.get(dSN).show = visable; // Set datasource visability
-      Console.Log("STATUS", `${name} datasource visability set to ${visable}`);
-    } else {
-      Console.Log("WARNING", `${name} datasource not found`);
-    }
-  }
-
-  export function removeDatasources(name: [string], inverse: boolean = false) {
-    // Remove selected datasource(s)
-    Console.Log("STATUS", `Removing ${name} datasource`);
-    let instances = 0;
-    for (let i = 0; i < viewer.dataSources.length; i++) {
-      switch (inverse) {
-        default:
-        case false: // Remove given datasource
-          if (!name.indexOf(viewer.dataSources.get(i).name)) {
-            var dS = viewer.dataSources.get(i); // Get the datasource, based on the index
-            viewer.dataSources.remove(dS, true); // Destroy the datasource
-            instances++;
-          }
-          break;
-        case true: // Remove all datasources, except the given one
-          if (name.indexOf(viewer.dataSources.get(i).name)) {
-            var dSA = viewer.dataSources.get(i); // Get the datasource, based on the index
-            viewer.dataSources.remove(dSA, true); // Destroy the datasource
-            instances++;
-          }
-          break;
-      }
-      Console.Log("SUCCESS", `${name} datasource destroyed`);
-    }
-    if (instances <= 0) {
-      Console.Log("WARNING", `${name} datasource not found`);
-    }
-  }
-
-  export function flyTo(
-    lon: number,
-    lat: number,
-    hei: number,
-    newHome: boolean = false,
-  ) {
-    Console.Log(
-      "STATUS",
-      `Flying to ${lon}, ${lat}; ending at a height of ${hei}`,
-    );
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(lon, lat, hei),
-    });
-    Console.Log(
-      "SUCCESS",
-      `Flown to ${lon}, ${lat}; ending at a height of ${hei}`,
-    );
-    if (newHome == true) {
-      homeView = [lon, lat, hei];
-    }
-  }
-  */
-
   export function changeTerrain(a: any, t: string = "ion") {
     Console.Log("STATUS", `Loading Terrain Data ${a} from ${t}`);
     switch (t) {
@@ -258,7 +208,6 @@
     debug,
     routeToPage,
   } from "$mid/store";
-  import type { CreditCard } from "lucide-svelte";
   import * as Console from "$mid/log";
 
   //import { getData } from "$mid/dbStore.js";
@@ -275,7 +224,7 @@
     viewer = new Viewer("cesiumContainer", {
       // UI
       animation: false, // Show animation controls
-      baseLayerPicker: false, // Show base layer picker
+      baseLayerPicker: true, // Show base layer picker
       fullscreenButton: false, // Show fullscreen button
       vrButton: false,
       geocoder: false, // Show location search
@@ -283,7 +232,7 @@
       infoBox: true, // Show infobox when point is clicked
       sceneModePicker: false, // Show scene mode picker
       selectionIndicator: false, // Show indicator around selected point
-      timeline: false, // Show Timeline
+      timeline: true, // Show Timeline
       navigationHelpButton: false, // Show help button
       //creditContainer: document.createElement("none"), // Show cesium ion link
 
@@ -311,21 +260,21 @@
 layers.add(cesiumLogo);
 */
 
+  let test = [{ 1: "noot" }, { 2: "boot" }];
+
   // Start Svelte Lifecycle
   onMount(async () => {
     f.to(-2.8136329, 51.458441, 5000, true);
 
-    const [geoJSON1, geoJSON2, geoJSON3] = [
-      await Cesium.IonResource.fromAssetId(2975982),
-      await Cesium.IonResource.fromAssetId(2975981),
-      await Cesium.IonResource.fromAssetId(2975980),
+    const geoJSON = [
+      { name: "geoJSON1", id: 2975982 },
+      { name: "geoJSON2", id: 2975981 },
+      { name: "geoJSON3", id: 2975980 },
     ];
 
-    ds.rename;
-
-    ds.load(geoJSON1, "geojson", "doc.geojson", "geoJSON1");
-    ds.load(geoJSON2, "geojson", "doc.geojson", "geoJSON2");
-    ds.load(geoJSON3, "geojson", "doc.geojson", "geoJSON3");
+    geoJSON.forEach(async function (data) {
+      ds.load(data.id, "geojson", "doc.geojson", data.name);
+    });
   });
 
   onMount(async () => {
@@ -342,10 +291,16 @@ layers.add(cesiumLogo);
             break;
           case "geoJSON2":
             break;
-          case "geoJSON2":
+          case "geoJSON3":
             break;
           default:
             ds.list();
+            Console.Log("WARNING", `Selected an unknown entity. 👀`);
+            console.log(selectedEntity);
+            Console.Log(
+              "INFO",
+              `Belongs to datasource: ${selectedEntity.entityCollection.owner.name}`,
+            );
             alert("Something has gone wrong");
             break;
         }

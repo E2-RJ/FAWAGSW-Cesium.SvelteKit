@@ -13,15 +13,18 @@ console.log( "\u001b[1;35m Purple message" );
 console.log( "\u001b[1;36m Cyan message" );
 */
 
-export function Log (type, message, space) {
+export function Log(type, message, space) {
   const timeStamp = new Date().toLocaleTimeString('en-GB')
   switch (type) {
     case "STATUS":
     case "REQUEST":
-      console.info(`[${timeStamp}] ${type}: ${message}`)
+      console.log(`[${timeStamp}] ${type}: ${message}`)
       break;
     case "SUCCESS":
-      console.info(`\u001b[1;32m[${timeStamp}] ${type}: ${message}\u001b[0m`)
+      console.log(`\u001b[1;32m[${timeStamp}] ${type}: ${message}\u001b[0m`)
+      break;
+    case "INFO":
+      console.info(`\u001b[1;34m[${timeStamp}] ${type}: ${message}\u001b[0m`)
       break;
     case "DEBUG":
       console.debug(`\u001b[1;36m[${timeStamp}] ${type}: ${message}\u001b[0m`)

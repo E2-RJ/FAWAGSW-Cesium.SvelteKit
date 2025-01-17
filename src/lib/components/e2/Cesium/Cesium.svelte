@@ -51,21 +51,29 @@
   class dataSource {
     async load(
       datasource: any,
+      source: string = "json",
       type: string = "czml",
       oldName: string = "",
       newName: string = "",
     ) {
+      let d = datasource;
+      //const [s, t, o, n] = [source, type, oldName, newName];
+      Console.Log("REQUEST", `Loading ${datasource} from ${source}`);
+
+      if (source == "ion") {
+        d = await Cesium.IonResource.fromAssetId(datasource);
+      }
       switch (type) {
         case "czml":
-          viewer.dataSources.add(Cesium.CzmlDataSource.load(datasource));
+          viewer.dataSources.add(Cesium.CzmlDataSource.load(d));
           Console.Log(
             "SUCCESS",
             `Loaded ${datasource} datasource from ${type}`,
           );
           break;
         case "geojson":
-          const g = await Cesium.IonResource.fromAssetId(datasource);
-          viewer.dataSources.add(Cesium.GeoJsonDataSource.load(g));
+          console.log(d);
+          await viewer.dataSources.add(Cesium.GeoJsonDataSource.load(d));
           Console.Log(
             "SUCCESS",
             `Loaded ${datasource} datasource from ${type}`,
@@ -73,7 +81,8 @@
           break;
       }
       if (oldName !== "" && newName !== "") {
-        setTimeout(new dataSource().rename, 250, oldName, newName);
+        //setTimeout(new dataSource().rename, 20, oldName, newName);
+        new dataSource().rename(oldName, newName);
       }
       viewer.scene.requestRender();
     }
@@ -104,7 +113,7 @@
       // List all datasources stored within Cesium
       Console.Log("STATUS", `Listing Datasources`);
       for (let i = 0; i < viewer.dataSources.length; i++) {
-        var dS = viewer.dataSources.get(i)
+        var dS = viewer.dataSources.get(i);
         Console.Log("SUCCESS", `Found datasource ${dS.name}`);
         console.log(dS);
       }
@@ -261,20 +270,22 @@
 layers.add(cesiumLogo);
 */
 
-  let test = [{ 1: "noot" }, { 2: "boot" }];
-
   // Start Svelte Lifecycle
   onMount(async () => {
     f.to(-2.8136329, 51.458441, 5000, true);
 
     const geoJSON = [
-      { name: "geoJSON1", id: 2975982 },
-      { name: "geoJSON2", id: 2975981 },
-      { name: "geoJSON3", id: 2980614 },
+      { name: "GorMoor", id: 2975982 },
+      { name: "WLCanal", id: 2975981 },
+      { name: "EAMRivers", id: 2980614 },
+      { name: "GorNPEm", id: 2982305 },
+      { name: "FreBoa", id: 2982444 },
+      { name: "WFDCat", id: 2980668 },
+      { name: "HyrNOSurvey", id: 2980627 },
     ];
 
     geoJSON.forEach(async function (data) {
-      ds.load(data.id, "geojson", "doc.geojson", data.name);
+      await ds.load(data.id, "ion", "geojson", "doc.geojson", data.name);
     });
   });
 
@@ -302,7 +313,7 @@ layers.add(cesiumLogo);
               "INFO",
               `Belongs to datasource: ${selectedEntity.entityCollection.owner.name}`,
             );
-            alert("Something has gone wrong");
+            //alert("Something has gone wrong");
             break;
         }
       } else {

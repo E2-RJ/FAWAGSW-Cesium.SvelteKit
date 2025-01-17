@@ -4,10 +4,16 @@
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
 
+    import AddION from "$ui_e2/Dialog/AddION.svelte";
+
     let datasourceVisability = {
-        geoJSON1: true,
-        geoJSON2: true,
-        geoJSON3: true,
+        GorMoor: true,
+        WLCanal: true,
+        EAMRivers: true,
+        GorNPEm: true,
+        FreBoa: true,
+        WFDCat: true,
+        HyrNOSurvey: true
     };
 
     function handleChange(d: string) {
@@ -19,11 +25,14 @@
     <h1 class="text-white">UAT FWAG BUTTONS</h1>
     <br />
     <div>
+        <AddION />
+        <br />
+        <br />
         <div class="flex items-center space-x-2">
             <Checkbox
                 id="terms"
-                bind:checked={datasourceVisability.geoJSON1}
-                on:click={async () => handleChange("geoJSON1")}
+                bind:checked={datasourceVisability.GorMoor}
+                on:click={async () => handleChange("GorMoor")}
                 class="accent-orange-500"
             />
             <Label
@@ -35,8 +44,8 @@
             </Label>
             <Checkbox
                 id="terms"
-                bind:checked={datasourceVisability.geoJSON2}
-                on:click={async () => handleChange("geoJSON2")}
+                bind:checked={datasourceVisability.WLCanal}
+                on:click={async () => handleChange("WLCanal")}
                 class="accent-orange-500"
             />
             <Label
@@ -48,8 +57,8 @@
             </Label>
             <Checkbox
                 id="terms"
-                bind:checked={datasourceVisability.geoJSON3}
-                on:click={async () => handleChange("geoJSON3")}
+                bind:checked={datasourceVisability.EAMRivers}
+                on:click={async () => handleChange("EAMRivers")}
                 class="accent-orange-500"
             />
             <Label
@@ -58,6 +67,58 @@
                 class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
                 EA_Main_Rivers_Surroundings
+            </Label>
+            <Checkbox
+                id="terms"
+                bind:checked={datasourceVisability.GorNPEm}
+                on:click={async () => handleChange("GorNPEm")}
+                class="accent-orange-500"
+            />
+            <Label
+                id="terms-label"
+                for="terms"
+                class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+                Gordano_New_Peat_Emissions
+            </Label>
+            <Checkbox
+                id="terms"
+                bind:checked={datasourceVisability.FreBoa}
+                on:click={async () => handleChange("FreBoa")}
+                class="accent-orange-500"
+            />
+            <Label
+                id="terms-label"
+                for="terms"
+                class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+                Freeboard_wgs84
+            </Label>
+            <Checkbox
+                id="terms"
+                bind:checked={datasourceVisability.WFDCat}
+                on:click={async () => handleChange("WFDCat")}
+                class="accent-orange-500"
+            />
+            <Label
+                id="terms-label"
+                for="terms"
+                class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+                WFD_Catchment
+            </Label>
+            <Checkbox
+                id="terms"
+                bind:checked={datasourceVisability.HyrNOSurvey}
+                on:click={async () => handleChange("HyrNOSurvey")}
+                class="accent-orange-500"
+            />
+            <Label
+                id="terms-label"
+                for="terms"
+                class="text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+            HydroNode_Ordnance Survey OPEN RIVERS
             </Label>
         </div>
         <br />

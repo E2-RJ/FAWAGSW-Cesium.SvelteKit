@@ -32,6 +32,7 @@
         "@types/uuid": "^10.0.0",
         "autoprefixer": "^10.4.16",
         "bits-ui": "^0.21.16",
+        "cmdk-sv": "^0.0.18",
         "formsnap": "^1.0.1",
         "lucide-svelte": "^0.471.0",
         "postcss": "^8.4.33",
@@ -47,7 +48,6 @@
     },
     "dependencies": {
         "clsx": "^2.1.1",
-        "cmdk-sv": "^0.0.17",
         "d3": "^7.9.0",
         "embla-carousel-autoplay": "^8.5.1",
         "embla-carousel-svelte": "^8.0.4",

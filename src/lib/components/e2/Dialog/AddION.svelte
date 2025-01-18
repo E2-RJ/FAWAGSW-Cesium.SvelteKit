@@ -9,6 +9,8 @@
 
     import * as Command from "$lib/components/ui/command/index.js";
     import * as Popover from "$lib/components/ui/popover/index.js";
+    import { Checkbox } from "$lib/components/ui/checkbox/index.js";
+    import { Label } from "$lib/components/ui/label/index.js";
 
     import { Atom } from "lucide-svelte";
     import Check from "lucide-svelte/icons/check";
@@ -19,9 +21,10 @@
     //create an event dispatcher
     const dispatch = createEventDispatcher();
 
-    let id: string;
-    let name: string;
-    let type: string;
+    let id: string,
+        name: string,
+        type: string,
+        token: string = "";
 
     let open = false;
 
@@ -29,6 +32,8 @@
         types.find((f) => f.value === type)?.label ?? "Select a type...";
 
     $: buttonDisabled = true;
+
+    $: ionToken = false;
 
     const types = [
         {
@@ -74,7 +79,16 @@
 
         function checkType() {
             if (type?.length > 0) {
-                console.log("Type set")
+                console.log("Type set");
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function checkToken() {
+            if (token?.toString().length == 180) {
+                console.log("Token correct length");
                 return true;
             } else {
                 return false;
@@ -103,7 +117,7 @@
         switch (type) {
             case "czml":
             case "geojson":
-                c.ds.load(id, "ion", type, "doc.geojson", name);
+                c.ds.load(id, "ion", type, token, "doc.geojson", name);
                 break;
             case "terrain":
                 c.changeTerrain(id);
@@ -179,6 +193,25 @@
                     <Input
                         placeholder="Name (No Spaces)"
                         bind:value={name}
+                        on:change={checkInput}
+                    />
+                {/if}
+                <Checkbox
+                    id="terms"
+                    bind:checked={ionToken}
+                    class="accent-orange-500"
+                />
+                <Label
+                    id="terms-label"
+                    for="terms"
+                    class="text-black text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                    Use token
+                </Label>
+                {#if ionToken == true}
+                    <Input
+                        placeholder="token"
+                        bind:value={token}
                         on:change={checkInput}
                     />
                 {/if}

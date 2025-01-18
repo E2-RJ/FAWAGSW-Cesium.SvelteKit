@@ -53,15 +53,24 @@
       datasource: any,
       source: string = "json",
       type: string = "czml",
+      key: string,
       oldName: string = "",
       newName: string = "",
     ) {
       let d = datasource;
       //const [s, t, o, n] = [source, type, oldName, newName];
+      console.log(datasource, source, type, key, oldName, newName);
       Console.Log("REQUEST", `Loading ${datasource} from ${source}`);
 
       if (source == "ion") {
-        d = await Cesium.IonResource.fromAssetId(datasource);
+        console.log("Creating cesium ion request");
+        if (key == "") {
+          d = await Cesium.IonResource.fromAssetId(datasource);
+        } else if ((key!== "")) {
+          d = await Cesium.IonResource.fromAssetId(datasource, {
+            accessToken: key,
+          });
+        }
       }
       switch (type) {
         case "czml":
@@ -285,7 +294,7 @@ layers.add(cesiumLogo);
     ];
 
     geoJSON.forEach(async function (data) {
-      await ds.load(data.id, "ion", "geojson", "doc.geojson", data.name);
+      await ds.load(data.id, "ion", "geojson", "", "doc.geojson", data.name);
     });
   });
 

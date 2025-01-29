@@ -14,6 +14,11 @@
         FreBoa: true,
         WFDCat: true,
         HyrNOSurvey: true,
+        GordanoDipwells: true,
+        GordanoEcohydro: true,
+        MajorWaterways: true,
+        MinorWaterways: true,
+        GordanoReserves: true,
     };
 
     function handleChange(d: string) {
@@ -57,23 +62,9 @@
                     <div>
                         <Checkbox
                             id="terms"
-                            bind:checked={datasourceVisability.WLCanal}
-                            on:click={async () => handleChange("WLCanal")}
-                            class="accent-orange-500 border-2 border-white rounded-md"
-                        />
-                        <Label
-                            id="terms-label"
-                            for="terms"
-                            class="ml-1  text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            Surrounding Rivers
-                        </Label>
-                    </div>
-                    <div>
-                        <Checkbox
-                            id="terms"
-                            bind:checked={datasourceVisability.EAMRivers}
-                            on:click={async () => handleChange("EAMRivers")}
+                            bind:checked={datasourceVisability.MajorWaterways}
+                            on:click={async () =>
+                                handleChange("MajorWaterways")}
                             class="accent-orange-500 border-2 border-white rounded-md"
                         />
                         <Label
@@ -81,7 +72,71 @@
                             for="terms"
                             class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
-                            EA Main Rivers
+                            Major Waterways
+                        </Label>
+                    </div>
+                    <div>
+                        <Checkbox
+                            id="terms"
+                            bind:checked={datasourceVisability.MinorWaterways}
+                            on:click={async () =>
+                                handleChange("MinorWaterways")}
+                            class="accent-orange-500 border-2 border-white rounded-md"
+                        />
+                        <Label
+                            id="terms-label"
+                            for="terms"
+                            class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Minor Waterways
+                        </Label>
+                    </div>
+                    <div>
+                        <Checkbox
+                            id="terms"
+                            bind:checked={datasourceVisability.GordanoDipwells}
+                            on:click={async () =>
+                                handleChange("GordanoDipwells")}
+                            class="accent-orange-500 border-2 border-white rounded-md"
+                        />
+                        <Label
+                            id="terms-label"
+                            for="terms"
+                            class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Gordano Dipwells
+                        </Label>
+                    </div>
+                    <div>
+                        <Checkbox
+                            id="terms"
+                            bind:checked={datasourceVisability.GordanoEcohydro}
+                            on:click={async () =>
+                                handleChange("GordanoEcohydro")}
+                            class="accent-orange-500 border-2 border-white rounded-md"
+                        />
+                        <Label
+                            id="terms-label"
+                            for="terms"
+                            class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Ecohydrological Features
+                        </Label>
+                    </div>
+                    <div>
+                        <Checkbox
+                            id="terms"
+                            bind:checked={datasourceVisability.GordanoReserves}
+                            on:click={async () =>
+                                handleChange("GordanoReserves")}
+                            class="accent-orange-500 border-2 border-white rounded-md"
+                        />
+                        <Label
+                            id="terms-label"
+                            for="terms"
+                            class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Gordano Reserves
                         </Label>
                     </div>
                     <div>
@@ -129,21 +184,6 @@
                             Portbury Ditch Water Catchement
                         </Label>
                     </div>
-                    <div>
-                        <Checkbox
-                            id="terms"
-                            bind:checked={datasourceVisability.HyrNOSurvey}
-                            on:click={async () => handleChange("HyrNOSurvey")}
-                            class="accent-orange-500 border-2 border-white rounded-md"
-                        />
-                        <Label
-                            id="terms-label"
-                            for="terms"
-                            class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                            HydroNode_Ordnance Survey OPEN RIVERS
-                        </Label>
-                    </div>
                 </div>
                 <br />
                 <div class="flex flex-col items-left space-y-2">
@@ -151,17 +191,17 @@
                     <Button
                         variant="secondary"
                         on:click={async () => c.changeTerrain(2975662)}
-                        >DSM_ST4070_P_10614_20210404_20210404_wgs84</Button
+                        >EA Digital Surface Model 1 - 1m</Button
                     >
                     <Button
                         variant="secondary"
                         on:click={async () => c.changeTerrain(2975648)}
-                        >DSM_ST4070_P_10614_20210404_20210404_wgs84</Button
+                        >EA Digital Surface Model 2 - 1m</Button
                     >
                     <Button
                         variant="secondary"
                         on:click={async () => c.changeTerrain(2975646)}
-                        >DTM_ST4570_P_10614_20210404_20210404_wgs84</Button
+                        >EA Digital Terrain Model 1 - 1m</Button
                     >
 
                     <!--<Button
@@ -169,11 +209,11 @@
                 on:click={async () => c.changeTerrain(2975994)}
                 >Vegetation Object Model 1</Button
             >
-            <Button
-                variant="secondary"
-                on:click={async () => c.changeTerrain(2975997)}
-                >Vegetation Object Model 2</Button
-            >-->
+                    <Button
+                        variant="secondary"
+                        on:click={async () => c.changeTerrain(2975997)}
+                        >Vegetation Object Model</Button
+                    >-->
                 </div>
                 <br />
                 <div class="flex flex-col items-left space-y-2">

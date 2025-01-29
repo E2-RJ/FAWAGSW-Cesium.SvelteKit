@@ -257,7 +257,11 @@
       timeline: true, // Show Timeline
       navigationHelpButton: false, // Show help button
       //creditContainer: document.createElement("none"), // Show cesium ion link
-
+      /*
+      terrain: Cesium.Terrain.fromWorldTerrain({
+        requestVertexNormals: true,
+      }),
+      */
       // EFFECTS?
       shouldAnimate: true, // Animation on by default
       scene3DOnly: true,
@@ -292,17 +296,59 @@ layers.add(cesiumLogo);
         id: 2975982,
         options: {
           stroke: Cesium.Color.fromBytes(37, 190, 50, 255),
-          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 20),
           strokeWidth: 3,
+          clampToGround: true,
         },
       },
+      {
+        name: "GordanoDipwells",
+        id: 3011735,
+        options: {
+          markerSize: 38,
+          markerSymbol: "water",
+          clampToGround: true,
+        },
+      },
+      {
+        name: "GordanoEcohydro",
+        id: 3011736,
+        options: {
+          markerSize: 38,
+          markerSymbol: "dam",
+          clampToGround: true,
+        },
+      },
+      {
+        name: "MinorWaterways",
+        id: 3011741,
+        options: {
+          stroke: Cesium.Color.fromBytes(30, 40, 250, 200),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          strokeWidth: 1,
+          clampToGround: true,
+        },
+      },
+
+      {
+        name: "MajorWaterways",
+        id: 3011740,
+        options: {
+          stroke: Cesium.Color.fromBytes(30, 40, 250, 200),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          strokeWidth: 1.4,
+          clampToGround: true,
+        },
+      },
+      /*
       {
         name: "WLCanal",
         id: 2975981,
         options: {
           stroke: Cesium.Color.fromBytes(0, 0, 255, 255),
           fill: Cesium.Color.fromBytes(0, 0, 255, 50),
-          strokeWidth: 3,
+          strokeWidth: 1,
+          clampToGround: true,
         },
       },
       {
@@ -311,15 +357,17 @@ layers.add(cesiumLogo);
         options: {
           stroke: Cesium.Color.fromBytes(0, 150, 255, 255),
           fill: Cesium.Color.fromBytes(0, 150, 255, 50),
-          strokeWidth: 3,
+          strokeWidth: 1,
+          clampToGround: true,
         },
       },
+*/
       {
         name: "GorNPEm",
         id: 2982305,
         options: {
-          stroke: Cesium.Color.fromBytes(0, 255, 0, 255),
-          fill: Cesium.Color.fromBytes(0, 255, 0, 50),
+          stroke: Cesium.Color.fromBytes(139, 69, 19, 255),
+          fill: Cesium.Color.fromBytes(139, 69, 19, 80),
           strokeWidth: 3,
         },
       },
@@ -327,20 +375,23 @@ layers.add(cesiumLogo);
         name: "FreBoa",
         id: 2982444,
         options: {
-          stroke: Cesium.Color.fromBytes(150, 255, 0, 255),
-          fill: Cesium.Color.fromBytes(150, 255, 0, 50),
+          stroke: Cesium.Color.fromBytes(10, 191, 255, 255),
+          fill: Cesium.Color.fromBytes(10, 191, 255, 80),
           strokeWidth: 3,
+          clampToGround: true,
         },
       },
       {
         name: "WFDCat",
         id: 2980668,
         options: {
-          stroke: Cesium.Color.fromBytes(0, 50, 150, 255),
+          stroke: Cesium.Color.fromBytes(10, 50, 150, 255),
           fill: Cesium.Color.fromBytes(37, 50, 150, 50),
           strokeWidth: 3,
+          clampToGround: true,
         },
       },
+      /*
       {
         name: "HyrNOSurvey",
         id: 2980627,
@@ -348,6 +399,19 @@ layers.add(cesiumLogo);
           stroke: Cesium.Color.fromBytes(37, 190, 50, 255),
           fill: Cesium.Color.fromBytes(37, 190, 50, 50),
           strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
+      */
+
+      {
+        name: "GordanoReserves",
+        id: 3011737,
+        options: {
+          stroke: Cesium.Color.fromBytes(60, 179, 114, 255),
+          fill: Cesium.Color.fromBytes(60, 179, 114, 50),
+          strokeWidth: 3,
+          clampToGround: true,
         },
       },
     ];

@@ -53,7 +53,7 @@
       datasource: any,
       source: string = "json",
       type: string = "czml",
-      key: string ="",
+      key: string = "",
       oldName: string = "",
       newName: string = "",
       options = {},
@@ -439,7 +439,12 @@ layers.add(cesiumLogo);
         setNodeID(selectedEntity.name);
         Console.Log("STATUS", `Selected ${selectedEntity.name}`);
         switch (nodeType) {
-          case "geoJSON1":
+          case "73656e736f72":
+            try {
+              routeToPage(`sensor/${selectedEntity.name}`, true);
+            } catch (error) {
+              console.log(error);
+            }
             break;
           case "geoJSON2":
             break;

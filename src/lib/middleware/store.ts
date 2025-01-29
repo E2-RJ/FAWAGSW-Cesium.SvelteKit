@@ -79,6 +79,12 @@ export async function setUserID(data = {}) {
     console.log("set userid: ",userID)
 }
 
+export let authenticated: string
+export async function setAuth(userID:string) {
+    authenticated = "";
+    authenticated = userID
+}
+
 // UserProfile
 export let listSelection: string;
 export function setListSelection(data: string) {

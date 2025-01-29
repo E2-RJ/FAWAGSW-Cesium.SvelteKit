@@ -53,9 +53,10 @@
       datasource: any,
       source: string = "json",
       type: string = "czml",
-      key: string,
+      key: string ="",
       oldName: string = "",
       newName: string = "",
+      options = {},
     ) {
       let d = datasource;
       //const [s, t, o, n] = [source, type, oldName, newName];
@@ -66,7 +67,7 @@
         console.log("Creating cesium ion request");
         if (key == "") {
           d = await Cesium.IonResource.fromAssetId(datasource);
-        } else if ((key!== "")) {
+        } else if (key !== "") {
           d = await Cesium.IonResource.fromAssetId(datasource, {
             accessToken: key,
           });
@@ -82,7 +83,9 @@
           break;
         case "geojson":
           console.log(d);
-          await viewer.dataSources.add(Cesium.GeoJsonDataSource.load(d));
+          await viewer.dataSources.add(
+            Cesium.GeoJsonDataSource.load(d, options),
+          );
           Console.Log(
             "SUCCESS",
             `Loaded ${datasource} datasource from ${type}`,
@@ -254,7 +257,11 @@
       timeline: true, // Show Timeline
       navigationHelpButton: false, // Show help button
       //creditContainer: document.createElement("none"), // Show cesium ion link
-
+      /*
+      terrain: Cesium.Terrain.fromWorldTerrain({
+        requestVertexNormals: true,
+      }),
+      */
       // EFFECTS?
       shouldAnimate: true, // Animation on by default
       scene3DOnly: true,
@@ -284,17 +291,141 @@ layers.add(cesiumLogo);
     f.to(-2.8136329, 51.458441, 5000, true);
 
     const geoJSON = [
-      { name: "GorMoor", id: 2975982 },
-      { name: "WLCanal", id: 2975981 },
-      { name: "EAMRivers", id: 2980614 },
-      { name: "GorNPEm", id: 2982305 },
-      { name: "FreBoa", id: 2982444 },
-      { name: "WFDCat", id: 2980668 },
-      { name: "HyrNOSurvey", id: 2980627 },
+      {
+        name: "GorMoor",
+        id: 2975982,
+        options: {
+          stroke: Cesium.Color.fromBytes(37, 190, 50, 255),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 20),
+          strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
+      {
+        name: "GordanoDipwells",
+        id: 3011735,
+        options: {
+          markerSize: 38,
+          markerSymbol: "water",
+          clampToGround: true,
+        },
+      },
+      {
+        name: "GordanoEcohydro",
+        id: 3011736,
+        options: {
+          markerSize: 38,
+          markerSymbol: "dam",
+          clampToGround: true,
+        },
+      },
+      {
+        name: "MinorWaterways",
+        id: 3011741,
+        options: {
+          stroke: Cesium.Color.fromBytes(30, 40, 250, 200),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          strokeWidth: 1,
+          clampToGround: true,
+        },
+      },
+
+      {
+        name: "MajorWaterways",
+        id: 3011740,
+        options: {
+          stroke: Cesium.Color.fromBytes(30, 40, 250, 200),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          strokeWidth: 1.4,
+          clampToGround: true,
+        },
+      },
+      /*
+      {
+        name: "WLCanal",
+        id: 2975981,
+        options: {
+          stroke: Cesium.Color.fromBytes(0, 0, 255, 255),
+          fill: Cesium.Color.fromBytes(0, 0, 255, 50),
+          strokeWidth: 1,
+          clampToGround: true,
+        },
+      },
+      {
+        name: "EAMRivers",
+        id: 2980614,
+        options: {
+          stroke: Cesium.Color.fromBytes(0, 150, 255, 255),
+          fill: Cesium.Color.fromBytes(0, 150, 255, 50),
+          strokeWidth: 1,
+          clampToGround: true,
+        },
+      },
+*/
+      {
+        name: "GorNPEm",
+        id: 2982305,
+        options: {
+          stroke: Cesium.Color.fromBytes(139, 69, 19, 255),
+          fill: Cesium.Color.fromBytes(139, 69, 19, 80),
+          strokeWidth: 3,
+        },
+      },
+      {
+        name: "FreBoa",
+        id: 2982444,
+        options: {
+          stroke: Cesium.Color.fromBytes(10, 191, 255, 255),
+          fill: Cesium.Color.fromBytes(10, 191, 255, 80),
+          strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
+      {
+        name: "WFDCat",
+        id: 2980668,
+        options: {
+          stroke: Cesium.Color.fromBytes(10, 50, 150, 255),
+          fill: Cesium.Color.fromBytes(37, 50, 150, 50),
+          strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
+      /*
+      {
+        name: "HyrNOSurvey",
+        id: 2980627,
+        options: {
+          stroke: Cesium.Color.fromBytes(37, 190, 50, 255),
+          fill: Cesium.Color.fromBytes(37, 190, 50, 50),
+          strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
+      */
+
+      {
+        name: "GordanoReserves",
+        id: 3011737,
+        options: {
+          stroke: Cesium.Color.fromBytes(60, 179, 114, 255),
+          fill: Cesium.Color.fromBytes(60, 179, 114, 50),
+          strokeWidth: 3,
+          clampToGround: true,
+        },
+      },
     ];
 
     geoJSON.forEach(async function (data) {
-      await ds.load(data.id, "ion", "geojson", "", "doc.geojson", data.name);
+      await ds.load(
+        data.id,
+        "ion",
+        "geojson",
+        "",
+        "doc.geojson",
+        data.name,
+        data.options,
+      );
     });
   });
 

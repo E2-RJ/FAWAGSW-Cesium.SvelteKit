@@ -195,19 +195,19 @@
                         bind:value={name}
                         on:change={checkInput}
                     />
+                    <Checkbox
+                        id="terms"
+                        bind:checked={ionToken}
+                        class="accent-orange-500"
+                    />
+                    <Label
+                        id="terms-label"
+                        for="terms"
+                        class="text-black text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Use token
+                    </Label>
                 {/if}
-                <Checkbox
-                    id="terms"
-                    bind:checked={ionToken}
-                    class="accent-orange-500"
-                />
-                <Label
-                    id="terms-label"
-                    for="terms"
-                    class="text-black text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Use token
-                </Label>
                 {#if ionToken == true}
                     <Input
                         placeholder="token"

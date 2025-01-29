@@ -53,7 +53,7 @@
       datasource: any,
       source: string = "json",
       type: string = "czml",
-      key: string,
+      key: string ="",
       oldName: string = "",
       newName: string = "",
       options = {},

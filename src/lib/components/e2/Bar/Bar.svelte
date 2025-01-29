@@ -4,7 +4,11 @@
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
     import AddION from "$ui_e2/Dialog/AddION.svelte";
+    import DemiAuth from "$ui_e2/Dialog/AuthDialog.svelte";
     import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
+    import * as Console from "$mid/log";
+
+    import { projectAPI, authenticated } from "$mid/store";
 
     let datasourceVisability = {
         GorMoor: true,
@@ -24,6 +28,24 @@
     function handleChange(d: string) {
         c.ds.visability(d, !datasourceVisability[d]);
     }
+
+    function handleAuthState(event) {
+        let user = authenticated;
+        c.ds.remove(["projectSensorNodeLocations"]);
+        fetch(projectAPI + `FWAGSW/sensor/${user}`, {
+            method: "GET",
+        }) // Include the cookie in the headers
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                // pass response into function
+                Console.Log("REQUEST", `Fetch listSensors`);
+                Console.Log("SUCCESS", `${json.length - 1} sensors recieved`); // Log number of sensors we recieved
+                console.table(json.slice(1));
+                c.ds.load(json);
+            });
+    }
 </script>
 
 <ScrollArea class="rounded-md">
@@ -32,6 +54,8 @@
             <h1 class="text-white text-lg font-bold">FWAG SW Data Layers</h1>
             <br />
             <div>
+                <DemiAuth on:authentication={handleAuthState} />
+                <!--NOT connected to DB-->
                 <AddION />
                 <Label
                     id="terms-label"

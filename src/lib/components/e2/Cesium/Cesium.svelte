@@ -65,12 +65,22 @@
 
       if (source == "ion") {
         console.log("Creating cesium ion request");
-        if (key == "") {
-          d = await Cesium.IonResource.fromAssetId(datasource);
-        } else if (key !== "") {
-          d = await Cesium.IonResource.fromAssetId(datasource, {
-            accessToken: key,
-          });
+        switch (type) {
+          case "czml":
+          case "geojson":
+            console.log("Requesting GeoJSON from cesium ion");
+            if (key == "") {
+              d = await Cesium.IonResource.fromAssetId(datasource);
+            } else if (key !== "") {
+              d = await Cesium.IonResource.fromAssetId(datasource, {
+                accessToken: key,
+              });
+            }
+            break;
+          case "pointCloud":
+            console.log("Requesting PointCloud from cesium ion");
+            d = await Cesium.Cesium3DTileset.fromIonAssetId(datasource);
+            break;
         }
       }
       switch (type) {
@@ -90,6 +100,10 @@
             "SUCCESS",
             `Loaded ${datasource} datasource from ${type}`,
           );
+          break;
+        case "pointCloud":
+          console.log(d);
+          await viewer.scene.primitives.add(d);
           break;
       }
       if (oldName !== "" && newName !== "") {
@@ -236,7 +250,7 @@
 
   export function updateViewModel(key: string, value: number[]) {
     viewModel[key] = value;
-    console.log(viewModel)
+    console.log(viewModel);
     updateMaterial();
   }
 
@@ -610,6 +624,8 @@ layers.add(cesiumLogo);
         data.options,
       );
     });
+
+    //await ds.load("3020415", "ion", "pointCloud");
 
     updateMaterial();
   });

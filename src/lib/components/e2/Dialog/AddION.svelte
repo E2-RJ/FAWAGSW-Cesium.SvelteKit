@@ -44,6 +44,10 @@
             value: "terrain",
             label: "Terrain",
         },
+        {
+            value: "pointCloud",
+            label: "Point Cloud",
+        },
     ];
 
     function closeAndFocusTrigger(triggerId: string) {
@@ -106,6 +110,7 @@
                 }
                 break;
             case "terrain":
+            case "pointCloud":
                 if (checkType() && checkId()) {
                     buttonDisabled = false;
                 }
@@ -121,6 +126,9 @@
                 break;
             case "terrain":
                 c.changeTerrain(id);
+                break;
+            case "pointCloud":
+                c.ds.load(id, "ion", type);
                 break;
         }
     }
@@ -190,23 +198,25 @@
                     on:change={checkInput}
                 />
                 {#if type !== "terrain"}
-                    <Input
-                        placeholder="Name (No Spaces)"
-                        bind:value={name}
-                        on:change={checkInput}
-                    />
-                    <Checkbox
-                        id="terms"
-                        bind:checked={ionToken}
-                        class="accent-orange-500"
-                    />
-                    <Label
-                        id="terms-label"
-                        for="terms"
-                        class="text-black text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                        Use token
-                    </Label>
+                    {#if type !== "pointCloud"}
+                        <Input
+                            placeholder="Name (No Spaces)"
+                            bind:value={name}
+                            on:change={checkInput}
+                        />
+                        <Checkbox
+                            id="terms"
+                            bind:checked={ionToken}
+                            class="accent-orange-500"
+                        />
+                        <Label
+                            id="terms-label"
+                            for="terms"
+                            class="text-black text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                            Use token
+                        </Label>
+                    {/if}
                 {/if}
                 {#if ionToken == true}
                     <Input

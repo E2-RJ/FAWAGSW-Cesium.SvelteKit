@@ -267,8 +267,9 @@
                         Band 1
                     </Label>
                     <Slider
-                        value={[80.76]}
-                        on:change={async () => c.updateMaterial()}
+                        value={c.viewModel.band1Position}
+                        onValueChange={async (value) =>
+                            c.updateViewModel("band1Position", value)}
                         max={200}
                         step={0.01}
                     />
@@ -280,7 +281,13 @@
                     >
                         Band 2
                     </Label>
-                    <Slider value={[80.76]} max={200} step={0.01} />
+                    <Slider
+                        value={c.viewModel.band2Position}
+                        onValueChange={async (value) =>
+                            c.updateViewModel("band2Position", value)}
+                        max={200}
+                        step={0.01}
+                    />
                     <br />
                     <Label
                         id="terms-label"
@@ -289,7 +296,13 @@
                     >
                         Band 3
                     </Label>
-                    <Slider value={[67.93]} max={200} step={0.01} />
+                    <Slider
+                        value={c.viewModel.band3Position}
+                        onValueChange={async (value) =>
+                            c.updateViewModel("band3Position", value)}
+                        max={200}
+                        step={0.01}
+                    />
                     <br />
                     <Label
                         id="terms-label"
@@ -298,7 +311,13 @@
                     >
                         Band Thickness
                     </Label>
-                    <Slider value={[7.36]} max={200} step={0.01} />
+                    <Slider
+                        value={c.viewModel.bandThickness}
+                        onValueChange={async (value) =>
+                            c.updateViewModel("bandThickness", value)}
+                        max={200}
+                        step={0.01}
+                    />
                 {/if}
             </div>
         {/if}

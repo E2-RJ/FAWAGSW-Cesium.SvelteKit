@@ -217,13 +217,13 @@
     }
   }
 
-  export let viewModel = {
+  export let viewModel: { [key: string]: any } = {
     show: false,
     gradient: false,
-    band1Position: "100",
-    band2Position: "80.76",
-    band3Position: "67.93",
-    bandThickness: "7.36",
+    band1Position: [100],
+    band2Position: [80.76],
+    band3Position: [67.93],
+    bandThickness: [7.36],
     bandTransparency: 0.5,
     backgroundTransparency: 0.75,
   };
@@ -234,12 +234,18 @@
     updateMaterial();
   }
 
+  export function updateViewModel(key: string, value: number[]) {
+    viewModel[key] = value;
+    console.log(viewModel)
+    updateMaterial();
+  }
+
   export function updateMaterial() {
     const gradient = Boolean(viewModel.gradient);
-    const band1Position = Number(viewModel.band1Position);
-    const band2Position = Number(viewModel.band2Position);
-    const band3Position = Number(viewModel.band3Position);
-    const bandThickness = Number(viewModel.bandThickness);
+    const band1Position = Number(viewModel.band1Position[0]);
+    const band2Position = Number(viewModel.band2Position[0]);
+    const band3Position = Number(viewModel.band3Position[0]);
+    const bandThickness = Number(viewModel.bandThickness[0]);
     const bandTransparency = Number(viewModel.bandTransparency);
     const backgroundTransparency = Number(viewModel.backgroundTransparency);
 

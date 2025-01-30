@@ -3,6 +3,7 @@
     import { Button } from "$ui_sh/button";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { Label } from "$lib/components/ui/label/index.js";
+    import { Slider } from "$lib/components/ui/slider";
     import AddION from "$ui_e2/Dialog/AddION.svelte";
     import DemiAuth from "$ui_e2/Dialog/AuthDialog.svelte";
     import * as Console from "$mid/log";
@@ -22,6 +23,7 @@
         MajorWaterways: true,
         MinorWaterways: true,
         GordanoReserves: true,
+        contourBand: false,
     };
 
     function handleChange(d: string) {
@@ -44,6 +46,12 @@
                 console.table(json.slice(1));
                 c.ds.load(json);
             });
+    }
+
+    let lidarLoaded: boolean = false;
+
+    function loaded() {
+        lidarLoaded = true;
     }
 </script>
 
@@ -207,17 +215,17 @@
             <Button
                 variant="secondary"
                 on:click={async () => c.changeTerrain(2975662)}
-                >EA Digital Surface Model 1 - 1m</Button
+                on:click={loaded}>EA Digital Surface Model 1 - 1m</Button
             >
             <Button
                 variant="secondary"
                 on:click={async () => c.changeTerrain(2975648)}
-                >EA Digital Surface Model 2 - 1m</Button
+                on:click={loaded}>EA Digital Surface Model 2 - 1m</Button
             >
             <Button
                 variant="secondary"
                 on:click={async () => c.changeTerrain(2975646)}
-                >EA Digital Terrain Model 1 - 1m</Button
+                on:click={loaded}>EA Digital Terrain Model 1 - 1m</Button
             >
 
             <!--<Button
@@ -231,6 +239,68 @@
                         >Vegetation Object Model</Button
                     >-->
         </div>
+        {#if lidarLoaded}
+            <br />
+            <div>
+                <Checkbox
+                    id="terms"
+                    bind:checked={datasourceVisability.contourBand}
+                    on:click={async () => c.updateMaterial()}
+                    class="accent-orange-500 border-2 border-white rounded-md"
+                />
+                <Label
+                    id="terms-label"
+                    for="terms"
+                    class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                    Contour Bands
+                </Label>
+                {#if datasourceVisability.contourBand}
+                    <br />
+                    <br />
+                    <Label
+                        id="terms-label"
+                        for="terms"
+                        class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Band 1
+                    </Label>
+                    <Slider
+                        value={[80.76]}
+                        on:change={async () => c.updateMaterial()}
+                        max={200}
+                        step={0.01}
+                    />
+                    <br />
+                    <Label
+                        id="terms-label"
+                        for="terms"
+                        class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Band 2
+                    </Label>
+                    <Slider value={[80.76]} max={200} step={0.01} />
+                    <br />
+                    <Label
+                        id="terms-label"
+                        for="terms"
+                        class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Band 3
+                    </Label>
+                    <Slider value={[67.93]} max={200} step={0.01} />
+                    <br />
+                    <Label
+                        id="terms-label"
+                        for="terms"
+                        class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Band Thickness
+                    </Label>
+                    <Slider value={[7.36]} max={200} step={0.01} />
+                {/if}
+            </div>
+        {/if}
         <br />
         <div class="flex flex-col items-left space-y-2">
             <h1 class="mt-1 text-primary-foreground">Camera</h1>

@@ -245,7 +245,8 @@
                 <Checkbox
                     id="terms"
                     bind:checked={datasourceVisability.contourBand}
-                    on:click={async () => c.updateMaterial()}
+                    on:click={async () =>
+                        c.showMaterial(!datasourceVisability.contourBand)}
                     class="accent-orange-500 border-2 border-white rounded-md"
                 />
                 <Label

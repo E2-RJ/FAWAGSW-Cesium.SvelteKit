@@ -218,7 +218,7 @@
   }
 
   export let viewModel = {
-    show: true,
+    show: false,
     gradient: false,
     band1Position: "100",
     band2Position: "80.76",
@@ -227,6 +227,12 @@
     bandTransparency: 0.5,
     backgroundTransparency: 0.75,
   };
+
+  export function showMaterial(show: boolean) {
+    console.log(show);
+    viewModel.show = show;
+    updateMaterial();
+  }
 
   export function updateMaterial() {
     const gradient = Boolean(viewModel.gradient);
@@ -374,11 +380,18 @@
       layers.push(combinedBand);
     }
 
-    const material = Cesium.createElevationBandMaterial({
-      scene: viewer.scene,
-      layers: layers,
-    });
+    let material;
+
+    if (viewModel.show) {
+      material = Cesium.createElevationBandMaterial({
+        scene: viewer.scene,
+        layers: layers,
+      });
+    } else {
+      material = material && material.destroy();
+    }
     viewer.scene.globe.material = material;
+    viewer.scene.requestRender();
   }
 </script>
 

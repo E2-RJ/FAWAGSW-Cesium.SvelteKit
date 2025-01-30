@@ -128,7 +128,7 @@
                 c.changeTerrain(id);
                 break;
             case "pointCloud":
-                c.ds.load(id, "ion", type);
+                c.ds.load(id, "ion", type, token, "tempName", id);
                 break;
         }
     }

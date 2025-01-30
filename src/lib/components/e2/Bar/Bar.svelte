@@ -23,6 +23,7 @@
         MajorWaterways: true,
         MinorWaterways: true,
         GordanoReserves: true,
+        pointCloud: false,
         contourBand: false,
     };
 
@@ -53,9 +54,17 @@
     function loaded() {
         lidarLoaded = true;
     }
+
+    function handlePointClouds() {
+        c.ds.cloudVisability(!datasourceVisability.pointCloud);
+        c.ds.cloudVisability(!datasourceVisability.pointCloud);
+    }
 </script>
 
 <div>
+    <Button variant="secondary" on:click={async () => c.listPrimitives()}
+        >list primitives</Button
+    >
     <h1 class="text-white text-lg font-bold">FWAG SW Data Layers</h1>
     <br />
     <div>
@@ -238,6 +247,23 @@
                         on:click={async () => c.changeTerrain(2975997)}
                         >Vegetation Object Model</Button
                     >-->
+        </div>
+        <br />
+        <br />
+        <div>
+            <Checkbox
+                id="terms"
+                bind:checked={datasourceVisability.pointCloud}
+                on:click={async () => handlePointClouds()}
+                class="accent-orange-500 border-2 border-white rounded-md"
+            />
+            <Label
+                id="terms-label"
+                for="terms"
+                class="ml-1 text-white text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+                PoInT cLoUd
+            </Label>
         </div>
         {#if lidarLoaded}
             <br />

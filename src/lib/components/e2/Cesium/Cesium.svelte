@@ -103,36 +103,89 @@
           break;
         case "pointCloud":
           console.log(d);
-          await viewer.scene.primitives.add(d);
+          let prim = await viewer.scene.primitives.add(d);
+          prim.name = newName;
+          prim.show = false;
+          if (options !== "") {
+            prim.style = new Cesium.Cesium3DTileStyle(options);
+          }
           break;
       }
-      if (oldName !== "" && newName !== "") {
-        //setTimeout(new dataSource().rename, 20, oldName, newName);
-        new dataSource().rename(oldName, newName);
+      if (type !== "pointCloud") {
+        if (oldName !== "" && newName !== "") {
+          //setTimeout(new dataSource().rename, 20, oldName, newName);
+          new dataSource().rename(type, oldName, newName);
+        }
       }
       viewer.scene.requestRender();
     }
-    rename(oldName: string, newName: string) {
-      Console.Log("STATUS", `Renaming ${oldName} datasource to ${newName}`);
-      var exists = new dataSource().find(newName);
+    rename(type: string, oldName: string, newName: string) {
+      Console.Log("STATUS", `Renaming ${oldName} ${type} to ${newName}`);
+      var exists = new dataSource().find(type, newName);
+      console.log(exists);
       if (exists !== -1) {
         Console.Log(
           "WARNING",
-          `${newName} datasource already exists, is this intentional?`,
+          `${newName} ${type} already exists, is this intentional?`,
         );
-      }
-      var dSN = new dataSource().find(oldName); // Get the datasources number
-      if (dSN !== -1) {
-        viewer.dataSources.get(dSN).name = newName; // Set datasource visability
-        Console.Log("SUCCESS", `${oldName} datasource name set to ${newName}`);
       } else {
-        Console.Log("ERROR", `${oldName} datasource not found`);
+        var dSN = new dataSource().find(type, oldName); // Get the datasources number
+
+        switch (type) {
+          case "czml":
+          case "geojson":
+            if (dSN !== -1) {
+              viewer.dataSources.get(dSN).name = newName; // Set datasource visability
+              Console.Log(
+                "SUCCESS",
+                `${oldName} datasource name set to ${newName}`,
+              );
+            } else {
+              Console.Log("ERROR", `${oldName} datasource not found`);
+            }
+            break;
+          case "pointCloud":
+            if (dSN !== -1) {
+              viewer.scene.primitives.get(dSN).name = newName; // Set datasource visability
+              Console.Log(
+                "SUCCESS",
+                `${oldName} datasource name set to ${newName}`,
+              );
+            } else {
+              Console.Log("ERROR", `${oldName} datasource not found`);
+            }
+            break;
+        }
       }
     }
-    find(name: string) {
-      var dS = viewer.dataSources.getByName(name);
-      var dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
 
+    find(type: string, name: string) {
+      let dS, dSN;
+      switch (type) {
+        case "czml":
+        case "geojson":
+          dSN = -1;
+          dS = viewer.dataSources.getByName(name);
+          dSN = viewer.dataSources.indexOf(dS[0]); // Get the datasources number
+          Console.Log("SUCCESS", `Found datasource ${name}`);
+          console.log(dS);
+          break;
+        case "pointCloud":
+          console.log("FINDING: " + name);
+          dSN = -1;
+          for (let i = 0; i < viewer.scene.primitives.length; i++) {
+            let dS2 = viewer.scene.primitives.get(i);
+            console.log(dS2.name);
+            if (dS2.name == name) {
+              dSN = i;
+              Console.Log("SUCCESS", `Found datasource ${dS2.name}`);
+              console.log(dSN);
+            } else {
+              dSN = -1;
+            }
+          }
+          break;
+      }
       return dSN;
     }
     list() {
@@ -146,7 +199,7 @@
     }
     visability(name: string, visable: boolean) {
       // Toggle visability of a given datasource
-      var dSN = new dataSource().find(name); // Get the datasources number
+      var dSN = new dataSource().find("czml", name); // Get the datasources number
       if (dSN !== -1) {
         viewer.dataSources.get(dSN).show = visable; // Set datasource visability
         viewer.scene.requestRender();
@@ -158,6 +211,22 @@
         Console.Log("ERROR", `${name} datasource not found`);
       }
     }
+
+    cloudVisability(visable: boolean) {
+      console.log(visable);
+      // Toggle visability of a given datasource
+      for (let i = 0; i < viewer.scene.primitives.length; i++) {
+        var dS = viewer.scene.primitives.get(i);
+        //viewer.scene.primitives.get(i).name = i;
+        if (dS.name == "3021154" || dS.name == "3020415") {
+          dS.show = visable;
+        }
+        Console.Log("SUCCESS", `Found datasource ${dS.name}`);
+        console.log(dS);
+      }
+      viewer.scene.requestRender();
+    }
+
     remove(name: [string], inverse: boolean = false) {
       // Remove selected datasource(s)
       Console.Log("STATUS", `Removing ${name} datasource`);
@@ -413,6 +482,16 @@
     viewer.scene.globe.material = material;
     viewer.scene.requestRender();
   }
+
+  export function listPrimitives() {
+    Console.Log("STATUS", `Listing Primitives`);
+    for (let i = 0; i < viewer.scene.primitives.length; i++) {
+      var dS = viewer.scene.primitives.get(i);
+      //viewer.scene.primitives.get(i).name = i;
+      Console.Log("SUCCESS", `Found datasource ${dS.name}`);
+      console.log(dS);
+    }
+  }
 </script>
 
 <script lang="ts">
@@ -625,7 +704,51 @@ layers.add(cesiumLogo);
       );
     });
 
-    //await ds.load("3020415", "ion", "pointCloud");
+    const pointClouds = [
+      {
+        id: 3020415,
+        name: "3020415",
+        options: {
+          color: {
+            conditions: [
+              ["${Classification} === 2", "color('brown')"], // ground
+              ["${Classification} === 3", "color('greenyellow')"], // low vegetation
+              ["${Classification} === 4", "color('green')"], // medium vegetation
+              ["${Classification} === 5", "color('darkgreen')"], // high vegetation
+              ["true", "color('white')"],
+            ],
+          },
+        },
+      },
+      {
+        id: 3021154,
+        name: "3021154",
+        options: {
+          color: {
+            conditions: [
+              ["${Classification} === 2", "color('brown')"], // ground
+              ["${Classification} === 3", "color('greenyellow')"], // low vegetation
+              ["${Classification} === 4", "color('green')"], // medium vegetation
+              ["${Classification} === 5", "color('darkgreen')"], // high vegetation
+              ["true", "color('white')"],
+            ],
+          },
+        },
+      },
+    ];
+
+    pointClouds.forEach(async function (data) {
+      console.log(data);
+      await ds.load(
+        data.id,
+        "ion",
+        "pointCloud",
+        "",
+        "",
+        data.name,
+        data.options,
+      );
+    });
 
     updateMaterial();
   });

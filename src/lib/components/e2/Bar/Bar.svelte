@@ -57,14 +57,13 @@
 
     function handlePointClouds() {
         c.ds.cloudVisability(!datasourceVisability.pointCloud);
-        c.ds.cloudVisability(!datasourceVisability.pointCloud);
     }
 </script>
 
 <div>
-    <Button variant="secondary" on:click={async () => c.listPrimitives()}
+    <!--<Button variant="secondary" on:click={async () => c.listPrimitives()}
         >list primitives</Button
-    >
+    >-->
     <h1 class="text-white text-lg font-bold">FWAG SW Data Layers</h1>
     <br />
     <div>
